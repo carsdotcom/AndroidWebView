@@ -11,6 +11,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         WebView myWebView = (WebView) findViewById(R.id.webview);
-        myWebView.loadUrl("https://www.google.com");
+
+        String address = getString(R.string.address);
+        String protocol = getString(R.string.protocol);
+        String url = protocol + address;
+
+        myWebView.loadUrl(url);
     }
 }
