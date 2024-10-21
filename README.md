@@ -1,1 +1,1 @@
-Simple webview Android application to use with testing Webview -> Website requirements and vice versa
+Simple webview Android application to use with testing WebView -> Website requirements and vice versa
