@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">JavaWebView</string>
+    <string name="protocol">http://</string>
     <!-- 10.0.2.2 is a special URL to access your localhost
      @link https://developer.android.com/studio/run/emulator-networking#networkaddresses -->
     <string name="address">10.0.2.2</string>
-    <string name="protocol">http://</string>
+    <string name="port">:80</string>
 </resources>
