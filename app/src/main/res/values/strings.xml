@@ -5,4 +5,7 @@
      @link https://developer.android.com/studio/run/emulator-networking#networkaddresses -->
     <string name="address">10.0.2.2</string>
     <string name="port">:80</string>
+    <string name="back">Back</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 </resources>

@@ -1,8 +1,10 @@
 package com.example.javawebview;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
@@ -10,14 +12,34 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
-public class MainActivity extends AppCompatActivity {
+import com.google.android.material.navigation.NavigationView;
+
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+    private DrawerLayout drawer;
+
+    @SuppressLint("SetJavaScriptEnabled")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         WebView myWebView = findViewById(R.id.webview);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+
+        drawer = findViewById(R.id.drawer_layout);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
 
         WebSettings webSettings = myWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
@@ -33,8 +55,27 @@ public class MainActivity extends AppCompatActivity {
         myWebView.loadUrl(url);
     }
 
+    // @link https://web.archive.org/web/20230203152426/http://tools.android.com/tips/non-constant-fields
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.nav_back) {
+            Toast.makeText(this, "Back button pressed", Toast.LENGTH_SHORT).show();
+
+            // Run JS on the site to signal the mobile back button was pressed
+            WebView myWebView = findViewById(R.id.webview);
+            myWebView.evaluateJavascript("javascript:exampleWebsiteFunction();", null);
+
+            return true;
+        }
+
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
     // @link https://developer.android.com/develop/ui/views/layout/webapps/webview#UsingJavaScript
-    public class WebAppInterface {
+    public static class WebAppInterface {
         Context mContext;
 
         WebAppInterface(Context c) {
@@ -45,20 +86,29 @@ public class MainActivity extends AppCompatActivity {
         public void showToast(String toast) {
             Toast.makeText(mContext, toast, Toast.LENGTH_LONG).show();
         }
+
+        @JavascriptInterface
+        public void shouldNativeHandleButtonPress(String command) {
+            Toast.makeText(mContext, "shouldNativeHandleButtonPress: " + command, Toast.LENGTH_LONG).show();
+        }
     }
 
     // @link https://developer.android.com/develop/ui/views/layout/webapps/webview#HandlingNavigation
     private class MyWebViewClient extends WebViewClient {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-            if (getString(R.string.address).equals(request.getUrl().getHost())) {
-                // This is your website, so don't override. Let your WebView load the
-                // page.
+            String host = request.getUrl().getHost();
+            if (host == null) {
+                Toast.makeText(MainActivity.this, "Host is null", Toast.LENGTH_SHORT).show();
                 return false;
             }
 
-            // Otherwise, the link isn't for a page on your site, so launch another
-            // Activity that handles URLs.
+            if (getString(R.string.address).equals(host)) {
+                Toast.makeText(MainActivity.this, "Same domain - no new intent redirect", Toast.LENGTH_SHORT).show();
+                return false;
+            }
+
+            Toast.makeText(MainActivity.this, "Different domain - new intent redirect", Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(Intent.ACTION_VIEW, request.getUrl());
             startActivity(intent);
             return true;
