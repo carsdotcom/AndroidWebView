@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
+        drawer.closeDrawer(GravityCompat.START);
 
         if (id == R.id.nav_back) {
             Toast.makeText(this, "Back button pressed", Toast.LENGTH_SHORT).show();
@@ -70,7 +71,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             return true;
         }
 
-        drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
