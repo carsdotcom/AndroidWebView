@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         String protocol = getString(R.string.protocol);
         String port = getString(R.string.port);
         //String url = protocol + address + port + "/dealer-locator";
-        String url = protocol + address + port + "/detail/new-2025-subaru-outback-wilderness-all-wheel-drive-sport-utility-4s4btgud1s3163789";
+        String url = protocol + address + port + "/detail/used-2023-ford-f-150-xlt-four-wheel-drive-supercrew-cab-1ftfw1e52pfa33611";
 
         myWebView.loadUrl(url);
     }
