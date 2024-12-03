@@ -44,13 +44,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         WebSettings webSettings = myWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
 
-        myWebView.setWebViewClient(new MyWebViewClient());
-        myWebView.addJavascriptInterface(new WebAppInterface(this), "Android");
+        myWebView.setWebViewClient(new MyWebViewClient() {
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+
+                String jsCode = "window.ThirdPartyWVToNativeChaseJSBridgeHandler = {};";
+                myWebView.evaluateJavascript(jsCode, null);
+                jsCode = "window.ThirdPartyWVToNativeChaseJSBridgeHandler.externalBrowser = function(data) { console.log('Android app handling externalBrowser call!');console.log('url', data.url);console.log('speedbump', data.speedBump); };";
+                myWebView.evaluateJavascript(jsCode, null);
+                jsCode = "window.ThirdPartyWVToNativeChaseJSBridgeHandler.updateNativeNavigationBarButtons = function(data) { console.log('Android app handling updateNativeNavigationBarButtons call!');console.log(JSON.stringify(data)); };";
+                myWebView.evaluateJavascript(jsCode, null);
+            }
+        });
 
         String address = getString(R.string.address);
         String protocol = getString(R.string.protocol);
         String port = getString(R.string.port);
-        String url = protocol + address + port;
+
+        //String url = protocol + address + port + "/dealer-locator";
+        String url = protocol + address + port + "/detail/used-2023-ford-f-150-xlt-four-wheel-drive-supercrew-cab-1ftfw1e52pfa33611";
 
         myWebView.loadUrl(url);
     }
