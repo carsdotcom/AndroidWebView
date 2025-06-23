@@ -50,7 +50,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         String address = getString(R.string.address);
         String protocol = getString(R.string.protocol);
         String port = getString(R.string.port);
-        String url = protocol + address + port;
+
+        String url = protocol + address + port + "/cars/dealer-locator";
+        //String url = protocol + address + port + "/detail/new-2025-subaru-outback-wilderness-all-wheel-drive-sport-utility-4s4btgud1s3163789";
 
         myWebView.loadUrl(url);
     }
@@ -66,9 +68,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             // Run JS on the site to signal the mobile back button was pressed
             WebView myWebView = findViewById(R.id.webview);
-            myWebView.evaluateJavascript("javascript:exampleWebsiteFunction();", null);
+
+            String jsCode = "console.log(typeof window.NativeToThirdPartyWVChaseJSBridgeHandler.shouldNativeHandleButtonPressed);";
+            myWebView.evaluateJavascript(jsCode, null);
+            jsCode = "window.NativeToThirdPartyWVChaseJSBridgeHandler.shouldNativeHandleButtonPressed('BACK');";
+            myWebView.evaluateJavascript(jsCode, null);
+            jsCode = "console.log('called to shouldNativeHandleButtonPressed(BACK)');";
+            myWebView.evaluateJavascript(jsCode, null);
 
             return true;
+        } else if (id == R.id.nav_font_scale_inc) {
+            WebView myWebView = findViewById(R.id.webview);
+
+            // call web function, increase font scale factor
+            String jsCode = "window?.JPKHybridSyncKit?.set({'command':'updateDynamicFont',options: {'fontScaleFactor':1.1}});";
+            myWebView.evaluateJavascript(jsCode, null);
+        } else if (id == R.id.nav_font_scale_dec) {
+            WebView myWebView = findViewById(R.id.webview);
+
+            // call web function, decrease font scale factor
+            String jsCode = "window?.JPKHybridSyncKit?.set({'command':'updateDynamicFont',options: {'fontScaleFactor':0.9}});";
+            myWebView.evaluateJavascript(jsCode, null);
         }
 
         return true;
@@ -88,8 +108,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         @JavascriptInterface
-        public void shouldNativeHandleButtonPress(String command) {
-            Toast.makeText(mContext, "shouldNativeHandleButtonPress: " + command, Toast.LENGTH_LONG).show();
+        public void shouldNativeHandleButtonPressed(String command) {
+            Toast.makeText(mContext, "shouldNativeHandleButtonPressed: " + command, Toast.LENGTH_LONG).show();
         }
     }
 

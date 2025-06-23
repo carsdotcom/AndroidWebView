@@ -6,6 +6,8 @@
     <string name="address">10.0.2.2</string>
     <string name="port">:80</string>
     <string name="back">Back</string>
+    <string name="font_scale_inc">Font Scale - Increase</string>
+    <string name="font_scale_dec">Font Scale - Decrease</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 </resources>

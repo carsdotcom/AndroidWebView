@@ -4,4 +4,12 @@
             android:id="@+id/nav_back"
             android:title="@string/back"
             android:icon="@drawable/baseline_arrow_back_24" />
+    <item
+        android:id="@+id/nav_font_scale_inc"
+        android:icon="@android:drawable/arrow_up_float"
+        android:title="@string/font_scale_inc" />
+    <item
+        android:id="@+id/nav_font_scale_dec"
+        android:icon="@android:drawable/arrow_down_float"
+        android:title="@string/font_scale_dec" />
 </menu>
