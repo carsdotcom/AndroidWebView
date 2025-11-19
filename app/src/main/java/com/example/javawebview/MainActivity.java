@@ -47,6 +47,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         myWebView.setWebViewClient(new MyWebViewClient());
         myWebView.addJavascriptInterface(new WebAppInterface(this), "Android");
 
+        myWebView.setWebViewClient(new MyWebViewClient() {
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+
+                String jsCode = "console.log('injecting ThirdPartyWVToNativeChaseJSBridgeHandler window object...');";
+                myWebView.evaluateJavascript(jsCode, null);
+                jsCode = "window.ThirdPartyWVToNativeChaseJSBridgeHandler = {};";
+                myWebView.evaluateJavascript(jsCode, null);
+                jsCode = "window.ThirdPartyWVToNativeChaseJSBridgeHandler.externalBrowser = function(data) { console.log('Android app handling externalBrowser call!');console.log('url', data.url);console.log('speedbump', data.speedBump); };";
+                myWebView.evaluateJavascript(jsCode, null);
+            }
+        });
+
         String address = getString(R.string.address);
         String protocol = getString(R.string.protocol);
         String port = getString(R.string.port);
