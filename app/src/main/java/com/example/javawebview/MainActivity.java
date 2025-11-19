@@ -51,11 +51,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
 
-                String jsCode = "console.log('injecting ThirdPartyWVToNativeChaseJSBridgeHandler window object...');";
+                String jsCode = "console.log('[App] injecting ThirdPartyWVToNativeChaseJSBridgeHandler window object...');";
                 myWebView.evaluateJavascript(jsCode, null);
+
                 jsCode = "window.ThirdPartyWVToNativeChaseJSBridgeHandler = {};";
                 myWebView.evaluateJavascript(jsCode, null);
-                jsCode = "window.ThirdPartyWVToNativeChaseJSBridgeHandler.externalBrowser = function(data) { console.log('Android app handling externalBrowser call!');console.log('url', data.url);console.log('speedbump', data.speedBump); };";
+                jsCode = "window.ThirdPartyWVToNativeChaseJSBridgeHandler.externalBrowser = function(data) { console.log('[App] Android app handling externalBrowser call!');console.log('url', data.url);console.log('speedbump', data.speedBump); };";
+                myWebView.evaluateJavascript(jsCode, null);
+                jsCode = "window.ThirdPartyWVToNativeChaseJSBridgeHandler.updateNativeNavigationBarButtons = function(data) { console.log('[App] Android app handling updateNativeNavigationBarButtons call!');console.log('showBackArrow', data.showBackArrow);console.log('pageTitle', data.pageTitle);console.log('showProfileSettings', data.showProfileSettings); };";
+                myWebView.evaluateJavascript(jsCode, null);
+                jsCode = "window.ThirdPartyWVToNativeChaseJSBridgeHandler.releaseSpinner = function(data) { console.log('[App] Android app handling releaseSpinner call!');console.log('No payload'); };";
+                myWebView.evaluateJavascript(jsCode, null);
+
+                jsCode = "console.log('[App] ThirdPartyWVToNativeChaseJSBridgeHandler window object is ready!');";
                 myWebView.evaluateJavascript(jsCode, null);
             }
         });
